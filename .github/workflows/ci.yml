@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        go-version: ['1.25']
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: true
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run tests
+      shell: bash
+      run: go test -race -coverprofile=coverage.out ./...
+
+    - name: Generate coverage report
+      shell: bash
+      run: go tool cover -html=coverage.out -o coverage.html
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v5
+      if: matrix.os == 'ubuntu-latest'
+      with:
+        files: ./coverage.out
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: '1.25'
+        cache: true
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v8
+      with:
+        version: latest
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: '1.25'
+        cache: true
+
+    - name: Build
+      run: make build
+
+    - name: Test binary
+      run: ./githerd --help
+
+  goreleaser-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: '1.25'
+        cache: true
+
+    - name: Check GoReleaser config
+      uses: goreleaser/goreleaser-action@v6
+      with:
+        distribution: goreleaser
+        version: '~> v2'
+        args: check
+
+    - name: Test release build
+      uses: goreleaser/goreleaser-action@v6
+      with:
+        distribution: goreleaser
+        version: '~> v2'
+        args: release --snapshot --clean
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-artifacts
+        path: |
+          dist/*.tar.gz
+          dist/*.zip
+          dist/*checksums.txt
+          dist/githerd_*_*/*
+        retention-days: 7

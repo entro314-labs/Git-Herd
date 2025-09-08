@@ -1,0 +1,181 @@
+# GoReleaser v2 configuration for GitHerd (2025)
+# https://goreleaser.com/customization/
+
+version: 2
+
+project_name: githerd
+
+before:
+  hooks:
+    # Clean up and test before building
+    - go mod tidy
+    - go generate ./...
+    - go test -race ./...
+    - make clean
+
+builds:
+  - id: githerd
+    main: ./cmd/githerd
+    binary: githerd
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    # Remove 386 and arm32 - less common in 2025
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+
+archives:
+  - id: githerd
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+      - config.yaml
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  use: github
+  sort: asc
+  abbrev: 0
+  groups:
+    - title: "🚀 Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: "🐛 Bug fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: "📝 Documentation"
+      regexp: '^.*?docs(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: "🔧 Other"
+      order: 999
+  filters:
+    exclude:
+      - "^test:"
+      - "^ci:"
+      - "^build:"
+      - "^chore:"
+      - "merge conflict"
+      - Merge pull request
+      - Merge branch
+      - go mod tidy
+
+# GitHub release configuration
+release:
+  github:
+    owner: entro314-labs
+    name: Git-Herd
+  draft: false
+  prerelease: auto
+  mode: replace
+  header: |
+    ## GitHerd {{ .Tag }}
+
+    Welcome to this new release of GitHerd! 
+
+    **Full Changelog**: https://github.com/entro314-labs/Git-Herd/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+  footer: |
+    ## Installation
+
+    ### Homebrew (macOS/Linux)
+    ```bash
+    brew install entro314-labs/tap/githerd
+    ```
+
+    ### Winget (Windows)
+    ```bash
+    winget install GitHerd
+    ```
+
+    ### AUR (Arch Linux)
+    ```bash
+    yay -S githerd
+    ```
+
+    ### Manual Installation
+    Download the appropriate binary for your platform from the assets below.
+
+# Docker image configuration
+dockers:
+  - id: githerd
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - "ghcr.io/entro314-labs/{{ .ProjectName }}:{{ .Version }}"
+      - "ghcr.io/entro314-labs/{{ .ProjectName }}:latest"
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source=https://github.com/entro314-labs/Git-Herd"
+      - "--platform=linux/amd64"
+
+# SBOM generation disabled for CI compatibility
+# sboms:
+#   - artifacts: archive
+
+# Homebrew tap automation
+homebrew_casks:
+  - name: githerd
+    binary: githerd
+    repository:
+      owner: entro314-labs
+      name: homebrew-tap
+      branch: main
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Cask update for {{ .ProjectName }} version {{ .Tag }}"
+    homepage: https://github.com/entro314-labs/Git-Herd
+    description: "A concurrent Git repository management tool"
+
+# Linux packages (deb/rpm)
+nfpms:
+  - id: githerd
+    package_name: githerd
+    file_name_template: "{{ .ConventionalFileName }}"
+    homepage: https://github.com/entro314-labs/Git-Herd
+    description: A concurrent Git repository management tool written in Go
+    maintainer: entro314-labs <noreply@github.com>
+    license: MIT
+    vendor: entro314-labs
+    formats:
+      - deb
+      - rpm
+    contents:
+      - src: config.yaml
+        dst: /etc/githerd/githerd.yaml
+        type: config|noreplace
+    dependencies:
+      - git
+
+# Announcements (optional - uncomment to enable)
+# announce:
+#   discord:
+#     enabled: true
+#     message_template: 'GitHerd {{ .Tag }} is out! Check it out at {{ .ReleaseURL }}'
+#   slack:
+#     enabled: true
+#     message_template: 'GitHerd {{ .Tag }} is out! Check it out at {{ .ReleaseURL }}'

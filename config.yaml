@@ -1,0 +1,68 @@
+# GitHerd Configuration File
+# Place this file in your working directory or ~/.config/githerd/
+
+# Operation to perform: "fetch" or "pull"
+# fetch: Download changes without merging (safe, recommended)
+# pull: Download and merge changes (requires clean working directory)
+operation: fetch
+
+# Number of concurrent workers to use
+# Higher values = faster processing but more resource usage
+# Recommended: 5-20 depending on your system and network
+workers: 10
+
+# Whether to skip repositories with uncommitted changes
+# true: Skip dirty repos (recommended for pull operations)
+# false: Attempt operation on all repos
+skip-dirty: true
+
+# Process repositories recursively in subdirectories
+# true: Find repos in all subdirectories
+# false: Only process repos in immediate subdirectories
+recursive: true
+
+# Enable verbose logging for debugging
+# true: Show detailed operation logs
+# false: Show only results and errors
+verbose: false
+
+# Overall timeout for the entire operation
+# Format: duration string (e.g., "5m", "30s", "1h30m")
+timeout: 10m
+
+# Directories to exclude from repository discovery
+# These patterns will be matched against directory paths
+exclude:
+  - .git           # Git metadata directory
+  - node_modules   # Node.js dependencies
+  - vendor         # Go/PHP dependencies
+  - target         # Java/Maven build directory
+  - dist           # Distribution/build output
+  - build          # General build directory
+  - .vscode        # VS Code settings
+  - .idea          # IntelliJ IDEA settings
+  - __pycache__    # Python cache
+  - .pytest_cache # Pytest cache
+  - .coverage      # Coverage reports
+  - .tox           # Tox environments
+
+# Example advanced configuration for different use cases:
+
+# For large monorepos or slow networks:
+# workers: 5
+# timeout: 30m
+
+# For fast local operations:
+# workers: 20
+# timeout: 2m
+
+# For CI/CD environments:
+# verbose: true
+# skip-dirty: false
+# timeout: 15m
+
+# For development environments with many repos:
+# operation: fetch
+# workers: 15
+# skip-dirty: true
+# recursive: true
