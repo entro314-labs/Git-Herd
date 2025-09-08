@@ -13,15 +13,32 @@ import (
 	"githerd/internal/worker"
 )
 
+// Version information - populated at build time by GoReleaser
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+	builtBy = "unknown"
+)
+
+// buildVersion returns a formatted version string
+func buildVersion() string {
+	if version == "dev" {
+		return fmt.Sprintf("%s (built from source)", version)
+	}
+	return fmt.Sprintf("%s (commit: %s, built: %s, by: %s)", version, commit, date, builtBy)
+}
+
 func main() {
 	cfg := config.DefaultConfig()
 
 	rootCmd := &cobra.Command{
-		Use:   "githerd [path]",
-		Short: "Bulk git operations on multiple repositories",
-		Long: `GitHerd performs git operations (fetch/pull) on all git repositories 
+		Use:     "githerd [path]",
+		Short:   "Bulk git operations on multiple repositories",
+		Long:    `GitHerd performs git operations (fetch/pull) on all git repositories 
 found in the specified directory and its subdirectories.`,
-		Args: cobra.MaximumNArgs(1),
+		Version: buildVersion(),
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Setup signal handling for graceful shutdown
 			ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
