@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 func TestNew(t *testing.T) {

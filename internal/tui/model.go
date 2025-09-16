@@ -7,8 +7,8 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"githerd/internal/git"
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/internal/git"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 type Model struct {

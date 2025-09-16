@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 func TestScanner_FindRepos_EmptyDirectory(t *testing.T) {

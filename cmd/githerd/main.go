@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"githerd/internal/config"
-	"githerd/internal/worker"
+	"github.com/entro314-labs/Git-Herd/internal/config"
+	"github.com/entro314-labs/Git-Herd/internal/worker"
 )
 
 // Version information - populated at build time by GoReleaser

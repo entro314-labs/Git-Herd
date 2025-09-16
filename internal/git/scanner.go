@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 // Scanner handles discovering git repositories in a directory tree

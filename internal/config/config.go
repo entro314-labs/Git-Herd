@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 // DefaultConfig returns a configuration with sensible defaults

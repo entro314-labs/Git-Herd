@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 // saveReport saves a detailed report to a file

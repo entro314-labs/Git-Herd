@@ -11,9 +11,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"golang.org/x/sync/errgroup"
 
-	"githerd/internal/git"
-	"githerd/internal/tui"
-	"githerd/pkg/types"
+	"github.com/entro314-labs/Git-Herd/internal/git"
+	"github.com/entro314-labs/Git-Herd/internal/tui"
+	"github.com/entro314-labs/Git-Herd/pkg/types"
 )
 
 // Manager handles bulk git operations with worker pools
