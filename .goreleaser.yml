@@ -132,9 +132,11 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/entro314-labs/Git-Herd"
       - "--platform=linux/amd64"
 
-# SBOM generation disabled for CI compatibility
-# sboms:
-#   - artifacts: archive
+# SBOM generation for supply chain security
+sboms:
+  - artifacts: archive
+    documents:
+      - "{{ .ProjectName }}_{{ .Version }}_sbom.spdx.json"
 
 # Homebrew tap automation
 homebrew_casks:

@@ -64,9 +64,58 @@ jobs:
       with:
         version: latest
 
+  security:
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Set up Go
+      uses: actions/setup-go@v6
+      with:
+        go-version: '1.25'
+        cache: true
+
+    - name: Run Gosec Security Scanner
+      uses: securecodewarrior/github-action-gosec@master
+      with:
+        args: '-fmt sarif -out gosec.sarif ./...'
+
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: gosec.sarif
+
+    - name: Run Nancy vulnerability scanner
+      run: |
+        go install github.com/sonatypecommunity/nancy@latest
+        go list -json -deps ./... | nancy sleuth
+
+    - name: Run Go vulnerability scanner
+      run: |
+        go install golang.org/x/vuln/cmd/govulncheck@latest
+        govulncheck ./...
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy.sarif'
+
+    - name: Upload Trivy SARIF
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: 'trivy.sarif'
+
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout
       uses: actions/checkout@v5
