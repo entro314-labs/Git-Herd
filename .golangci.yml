@@ -1,435 +1,239 @@
 version: "2"
 
-run:
-  timeout: 5m
-  issues-exit-code: 1
-  tests: true
-  build-tags: []
-  allow-parallel-runners: true
-  go: "1.25.2"
+formatters:
+  enable:
+    # format the code
+    - gofmt
+    # format the block of imports
+    - gci
 
-output:
-  formats:
-    - format: colored-line-number
-  print-issued-lines: true
-  print-linter-name: true
+  settings:
+    # format the code with Go standard library
+    gofmt:
+      # simplify the code
+      # https://pkg.go.dev/cmd/gofmt#hdr-The_simplify_command
+      simplify: true
+      rewrite-rules:
+        # replace `interface{}` with `any` in the code on format
+        - pattern: 'interface{}'
+          replacement: 'any'
+
+    # make sure imports are always in a deterministic order
+    # https://github.com/daixiang0/gci/
+    gci:  # define the section orders for imports
+      sections:
+        # Standard section: captures all standard packages.
+        - standard
+        # Default section: catchall that is not standard or custom
+        - default
+        # linters that related to local tool, so they should be separated
+        - localmodule
+
+run:
+  # Timeout for analysis, e.g. 30s, 5m.
+  # Default: 1m
+  timeout: 5m
 
 issues:
+  # Maximum issues count per one linter.
+  # Set to 0 to disable.
+  # Default: 50
   max-issues-per-linter: 0
+  # Maximum count of issues with the same text.
+  # Set to 0 to disable.
+  # Default: 3
   max-same-issues: 0
-  new: false
-  fix: false
-  exclude-generated: use-default
-  exclude-case-sensitive: false
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - mnd
-        - goconst
-        - funlen
-        - dupl
-        - lll
-    - path: cmd/
-      linters:
-        - gochecknoglobals
-        - gochecknoinits
-    - path: internal/
-      linters:
-        - mnd
-      text: "Magic number"
-    - text: "weak cryptographic primitive"
-      linters:
-        - gosec
-    - text: "Use of builtin function"
-      linters:
-        - gocritic
-    - text: "Function 'main' is too long"
-      linters:
-        - funlen
-    - text: "cognitive complexity"
-      linters:
-        - gocognit
-    - path: test
-      linters:
-        - goconst
-        - funlen
-        - gocognit
-        - dupl
+  # Make issues output unique by line.
+  # Default: true
+  uniq-by-line: false
 
 linters:
-  disable-all: true
-  enable:
-    - asasalint
-    - asciicheck
-    - bidichk
-    - bodyclose
-    - containedctx
-    - contextcheck
-    - cyclop
-    - dupl
-    - dupword
-    - durationcheck
-    - errcheck
-    - errchkjson
-    - errname
-    - errorlint
-    - exhaustive
-    - copyloopvar
-    - forbidigo
-    - forcetypeassert
-    - funlen
-    - gci
-    - ginkgolinter
-    - gocheckcompilerdirectives
-    - gochecknoglobals
-    - gochecknoinits
-    - gocognit
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - godox
-    - gofmt
-    - gofumpt
-    - goheader
-    - goimports
-    - mnd
-    - gomoddirectives
-    - gomodguard
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - grouper
-    - importas
-    - ineffassign
-    - interfacebloat
-    - ireturn
-    - lll
-    - loggercheck
-    - maintidx
-    - makezero
-    - misspell
-    - nakedret
-    - nestif
-    - nilerr
-    - nilnil
-    - nlreturn
-    - noctx
-    - nolintlint
-    - nonamedreturns
-    - nosprintfhostport
-    - paralleltest
-    - prealloc
-    - predeclared
-    - promlinter
-    - reassign
-    - revive
-    - rowserrcheck
-    - sqlclosecheck
-    - staticcheck
-    - stylecheck
-    - tagliatelle
-    - usetesting
-    - testableexamples
-    - testpackage
-    - thelper
-    - tparallel
-    - unconvert
-    - unparam
-    - unused
-    - usestdlibvars
-    - wastedassign
-    - whitespace
-    - wrapcheck
-    - wsl
+  # some linters are enabled by default
+  # https://golangci-lint.run/usage/linters/
+  #
+  # enable some extra linters
+  default: all
 
-linters-settings:
-  dupl:
-    threshold: 100
+  settings:
+    usestdlibvars:
+      # Suggest the use of http.MethodXX.
+      # Default: true
+      http-method: true
+      # Suggest the use of http.StatusXX.
+      # Default: true
+      http-status-code: true
+      # Suggest the use of time.Weekday.String().
+      # Default: true
+      time-weekday: true
+      # Suggest the use of constants available in time package
+      # Default: false
+      time-layout: true
 
-  errcheck:
-    check-type-assertions: true
-    check-blank: true
-    exclude-functions:
-      - io/ioutil.ReadFile
-      - io.Copy(*bytes.Buffer)
-      - io.Copy(os.Stdout)
+    staticcheck:
+      # SAxxxx checks in https://staticcheck.io/docs/configuration/options/#checks
+      checks: ["all"]
 
-  exhaustive:
-    check-generated: false
-    default-signifies-exhaustive: false
+    nolintlint:
+      # Enable to require an explanation of nonzero length
+      # after each nolint directive.
+      # Default: false
+      require-explanation: true
+      # Enable to require nolint directives to mention the specific
+      # linter being suppressed.
+      # Default: false
+      require-specific: true
 
-  funlen:
-    lines: 80
-    statements: 50
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
 
-  gci:
-    sections:
-      - standard
-      - default
-      - prefix(github.com/entro314-labs/git-herd)
-    skip-generated: true
-    custom-order: true
+    gocritic:
+      enable-all: true
+      disabled-checks:
+        # Detects comments with non-idiomatic formatting.
+        # https://go-critic.com/overview.html#commentformatting
+        # Reason: Duplicate with other linters
+        - commentFormatting
 
-  goconst:
-    min-len: 2
-    min-occurrences: 2
+        # Runs user-defined rules using ruleguard linter.
+        # https://go-critic.com/overview.html#ruleguard
+        # Reason: we don't need it
+        - ruleguard
 
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-    disabled-checks:
-      - dupImport
-      - ifElseChain
-      - octalLiteral
-      - whyNoLint
+        # Detects when default case in switch isn't on 1st or last position.
+        # https://go-critic.com/overview.html#defaultcaseorder
+        # Reason: we don't care
+        - defaultCaseOrder
 
-  gocyclo:
-    min-complexity: 15
+        # Detects empty string checks that can be written more idiomatically.
+        # https://go-critic.com/overview.html#emptystringtest
+        # Reason: we don't want to enforce it, using len(s) == 0 is ok
+        - emptyStringTest
 
-  godot:
-    scope: declarations
-    exclude: []
-    capital: false
+        # Detects unwanted dependencies on the evaluation order.
+        # https://go-critic.com/overview.html#evalorder
+        # Reason: require code rewrite for almost nothing
+        - evalOrder
 
-  gofmt:
-    simplify: true
+        # Detects when imported package names shadowed in the assignments.
+        # https://go-critic.com/overview.html#importshadow
+        # Reason: require code rewrite for almost nothing
+        - importShadow
 
-  goimports:
-    local-prefixes: github.com/entro314-labs/git-herd
+        # Detects if function parameters could be combined by type and suggest the way to do it.
+        # https://go-critic.com/overview.html#paramtypecombine
+        # Reason: too opinionated
+        - paramTypeCombine
 
-  mnd:
-    checks:
-      - argument
-      - case
-      - condition
-      - operation
-      - return
-      - assign
-    ignored-numbers:
-      - "0"
-      - "1"
-      - "2"
-      - "3"
-      - "10"
-      - "100"
-      - "1000"
-    ignored-functions:
-      - strings.SplitN
-      - time.Unix
+        # Detects expressions like []rune(s)[0] that may cause unwanted rune slice allocation.
+        # https://go-critic.com/overview.html#preferdecoderune
+        # Reason: too opinionated
+        - preferDecodeRune
 
-  gomodguard:
-    allowed:
-      modules: []
-      domains: []
-    blocked:
-      modules: []
-      versions: []
-      local_replace_directives: true
+        # Detects WriteRune calls with rune literal argument that is single byte and reports to use WriteByte instead.
+        # https://go-critic.com/overview.html#preferwritebyte
+        # Reason: too opinionated
+        - preferWriteByte
 
-  gosec:
-    severity: medium
-    confidence: medium
-    excludes: []
+        # Detects loops that copy big objects during each iteration.
+        # https://go-critic.com/overview.html#rangevalcopy
+        # Reason: we don't care that much about RAM
+        - rangeValCopy
 
-  gosimple:
-    checks: ["all"]
+        # Detects TODO comments without detail/assignee.
+        # https://go-critic.com/overview.html#todocommentwithoutdetail
+        # Reason: no need
+        - todoCommentWithoutDetail
 
-  govet:
-    settings:
-      printf:
-        funcs:
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
-          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
-      shadow:
-        strict: true
-    enable:
-      - atomicalign
-      - deepequalerrors
-      - fieldalignment
-      - findcall
-      - nilness
-      - reflectvaluecompare
-      - shadow
-      - sortslice
-      - timeformat
-      - unusedwrite
+        # Ensures that `//nolint` comments include an explanation.
+        # https://go-critic.com/overview.html#whynolint
+        # Reason: nolintlint already enforces it
+        - whyNoLint
 
-  ineffassign:
-    check-exported: false
-
-  lll:
-    line-length: 120
-    tab-width: 1
-
-  makezero:
-    always: false
-
-  misspell:
-    locale: US
-    ignore-words: []
-
-  nakedret:
-    max-func-lines: 30
-
-  nestif:
-    min-complexity: 4
-
-  nolintlint:
-    allow-leading-space: true
-    allow-unused: false
-    require-explanation: false
-    require-specific: false
-
-  prealloc:
-    simple: true
-    range-loops: true
-    for-loops: false
-
-  predeclared:
-    ignore: ""
-    q: false
-
-  revive:
-    rules:
-      - name: atomic
-      - name: blank-imports
-      - name: bool-literal-in-expr
-      - name: confusing-naming
-      - name: confusing-results
-      - name: constant-logical-expr
-      - name: context-as-argument
-      - name: context-keys-type
-      - name: deep-exit
-      - name: defer
-      - name: dot-imports
-      - name: duplicated-imports
-      - name: early-return
-      - name: empty-block
-      - name: empty-lines
-      - name: error-naming
-      - name: error-return
-      - name: error-strings
-      - name: errorf
-      - name: exported
-      - name: flag-parameter
-      - name: function-result-limit
-        arguments: [2]
-      - name: get-return
-      - name: identical-branches
-      - name: if-return
-      - name: import-shadowing
-      - name: increment-decrement
-      - name: indent-error-flow
-      - name: modifies-parameter
-      - name: modifies-value-receiver
-      - name: package-comments
-      - name: range
-      - name: range-val-address
-      - name: range-val-in-closure
-      - name: receiver-naming
-      - name: redefines-builtin-id
-      - name: string-of-int
-      - name: struct-tag
-      - name: superfluous-else
-      - name: time-equal
-      - name: time-naming
-      - name: unexported-naming
-      - name: unexported-return
-      - name: unnecessary-stmt
-      - name: unreachable-code
-      - name: unused-parameter
-      - name: unused-receiver
-      - name: use-any
-      - name: useless-break
-      - name: var-declaration
-      - name: var-naming
-      - name: waitgroup-by-value
-
-  staticcheck:
-    checks: ["all"]
-
-  stylecheck:
-    checks: ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
-    dot-import-whitelist:
-      - fmt
-    initialisms: ["ACL", "API", "ASCII", "CPU", "CSS", "DNS", "EOF", "GUID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "QPS", "RAM", "RPC", "SLA", "SMTP", "SQL", "SSH", "TCP", "TLS", "TTL", "UDP", "UI", "GID", "UID", "UUID", "URI", "URL", "UTF8", "VM", "XML", "XMPP", "XSRF", "XSS", "SIP", "RTP", "AMQP", "DB", "TS"]
-    http-status-code-whitelist: ["200", "400", "404", "500"]
-
-  tagliatelle:
-    case:
+    revive:
+      enable-all-rules: true
       rules:
-        json: camel
-        yaml: camel
-        xml: camel
-        bson: camel
-        avro: snake
-        mapstructure: kebab
+        # we must provide configuration for linter that requires them
+        # enable-all-rules is OK, but many revive linters expect configuration
+        # and cannot work without them
 
-  testpackage:
-    skip-regexp: (export|internal)_test\.go
+        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#context-as-argument
+        - name: context-as-argument
+          arguments:
+            - allowTypesBefore: "*testing.T"
 
-  thelper:
-    test:
-      first: true
-      name: true
-      begin: true
-    benchmark:
-      first: true
-      name: true
-      begin: true
-    tb:
-      first: true
-      name: true
-      begin: true
-    fuzz:
-      first: true
-      name: true
-      begin: true
+        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#exported
+        - name: exported
+          arguments:
+            # enables checking public methods of private types
+            - "checkPrivateReceivers"
+            # make error messages clearer
+            - "sayRepetitiveInsteadOfStutters"
 
-  unparam:
-    check-exported: false
+        # this linter completes errcheck linter, it will report method called without handling the error
+        # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#unhandled-error
+        - name: unhandled-error
+          arguments: # here are the exceptions we don't want to be reported
+            - "fmt.Print.*"
+            - "fmt.Fprint.*"
+            - "bytes.Buffer.Write"
+            - "bytes.Buffer.WriteByte"
+            - "bytes.Buffer.WriteString"
+            - "strings.Builder.WriteString"
+            - "strings.Builder.WriteRune"
 
-  unused:
-    check-exported: false
+        # disable everything we don't want
+        - name: line-length-limit
+          disabled: true
+        - name: argument-limit
+          disabled: true
+        - name: max-public-structs
+          disabled: true
+        - name: function-result-limit
+          disabled: true
+        - name: function-length
+          disabled: true
+        - name: empty-lines
+          disabled: true
 
-  whitespace:
-    multi-if: false
-    multi-func: false
+    dupword:
+      # Keywords used to ignore detection.
+      # Default: []
+      ignore: []
+      #  - "blah" # this will accept "blah blah …" as a valid duplicate word
 
-  wrapcheck:
-    ignoreSigs:
-      - .Errorf(
-      - errors.New(
-      - errors.Unwrap(
-      - .Wrap(
-      - .Wrapf(
-      - .WithMessage(
-      - .WithMessagef(
-      - .WithStack(
-    ignoreSigRegexps:
-      - \.New.*Error\(
-    ignorePackageGlobs:
-      - encoding/*
-      - github.com/pkg/*
+    misspell:
+      # Correct spellings using locale preferences for US or UK.
+      # Setting locale to US will correct the British spelling of 'colour' to 'color'.
+      # Default ("") is to use a neutral variety of English.
+      locale: US
 
-  wsl:
-    strict-append: true
-    allow-assign-and-call: true
-    allow-assign-and-anything: false
-    allow-multiline-assign: true
-    force-case-trailing-whitespace: 0
+      # List of words to ignore
+      # among the one defined in https://github.com/golangci/misspell/blob/master/words.go
+      ignore-rules: []
+      #  - valor
+      #  - and
 
-severity:
-  default: error
-  rules:
-    - linters:
-        - revive
-      severity: warning
+      # Extra word corrections.
+      extra-words: []
+      #  - typo: "whattever"
+      #    correction: "whatever"
+
+output:
+  # Order to use when sorting results.
+  # Possible values: `file`, `linter`, and `severity`.
+  #
+  # If the severity values are inside the following list, they are ordered in this order:
+  #   1. error
+  #   2. warning
+  #   3. high
+  #   4. medium
+  #   5. low
+  # Either they are sorted alphabetically.
+  #
+  # Default: ["file"]
+  sort-order:
+    - linter
+    - severity
+    - file # filepath, line, and column.
