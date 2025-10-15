@@ -1,5 +1,5 @@
-# GitHerd Configuration File
-# Place this file in your working directory or ~/.config/githerd/
+# git-herd Configuration File
+# Place this file in your working directory or ~/.config/git-herd/
 
 # Operation to perform: "fetch" or "pull"
 # fetch: Download changes without merging (safe, recommended)

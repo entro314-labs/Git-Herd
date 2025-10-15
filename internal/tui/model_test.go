@@ -12,8 +12,8 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/entro314-labs/Git-Herd/internal/config"
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/internal/config"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 func TestNewModel(t *testing.T) {
@@ -688,4 +688,3 @@ func BenchmarkRepoProcessedUpdate(b *testing.B) {
 		_, _ = model.Update(repoMsg)
 	}
 }
-

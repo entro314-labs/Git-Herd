@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 func TestScanner_FindRepos_EmptyDirectory(t *testing.T) {
 	// Create temporary directory
-	tmpDir, err := os.MkdirTemp("", "githerd-test")
+	tmpDir, err := os.MkdirTemp("", "git-herd-test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -39,7 +39,7 @@ func TestScanner_FindRepos_EmptyDirectory(t *testing.T) {
 
 func TestScanner_FindRepos_WithGitRepo(t *testing.T) {
 	// Create temporary directory
-	tmpDir, err := os.MkdirTemp("", "githerd-test")
+	tmpDir, err := os.MkdirTemp("", "git-herd-test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -88,7 +88,7 @@ func TestScanner_FindRepos_WithGitRepo(t *testing.T) {
 
 func TestScanner_ExcludeDirectories(t *testing.T) {
 	// Create temporary directory
-	tmpDir, err := os.MkdirTemp("", "githerd-test")
+	tmpDir, err := os.MkdirTemp("", "git-herd-test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

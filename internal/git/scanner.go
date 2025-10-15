@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 // Scanner handles discovering git repositories in a directory tree
@@ -74,7 +74,7 @@ func (s *Scanner) FindRepos(ctx context.Context, rootPath string) ([]types.GitRe
 			mu.Lock()
 			repos = append(repos, repo)
 			foundCount++
-			
+
 			// Show progress every 10 repositories found (only in plain/verbose mode)
 			if (s.config.PlainMode || s.config.Verbose) && foundCount%10 == 0 {
 				fmt.Printf("   Found %d repositories so far...\n", foundCount)

@@ -1,7 +1,7 @@
-# GitHerd Makefile
+# git-herd Makefile
 
 # Variables
-BINARY_NAME=githerd
+BINARY_NAME=git-herd
 VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 BUILD_TIME=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 GO_VERSION=$(shell go version | cut -d' ' -f3)
@@ -16,13 +16,13 @@ all: clean build
 .PHONY: build
 build:
 	@echo "Building ${BINARY_NAME}..."
-	go build ${LDFLAGS} -o ${BINARY_NAME} ./cmd/githerd
+	go build ${LDFLAGS} -o ${BINARY_NAME} ./cmd/git-herd
 
 # Build with race detection for development
 .PHONY: build-dev
 build-dev:
 	@echo "Building ${BINARY_NAME} with race detection..."
-	go build -race ${LDFLAGS} -o ${BINARY_NAME}-dev ./cmd/githerd
+	go build -race ${LDFLAGS} -o ${BINARY_NAME}-dev ./cmd/git-herd
 
 # Install dependencies
 .PHONY: deps
@@ -93,22 +93,22 @@ uninstall:
 .PHONY: build-all
 build-all: clean
 	@echo "Building for all platforms..."
-	
+
 	@echo "Building for macOS (Intel)..."
-	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-amd64 ./cmd/githerd
-	
+	GOOS=darwin GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-amd64 ./cmd/git-herd
+
 	@echo "Building for macOS (Apple Silicon)..."
-	GOOS=darwin GOARCH=arm64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-arm64 ./cmd/githerd
-	
+	GOOS=darwin GOARCH=arm64 go build ${LDFLAGS} -o ${BINARY_NAME}-darwin-arm64 ./cmd/git-herd
+
 	@echo "Building for Linux (x64)..."
-	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-linux-amd64 ./cmd/githerd
-	
+	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-linux-amd64 ./cmd/git-herd
+
 	@echo "Building for Linux (ARM64)..."
-	GOOS=linux GOARCH=arm64 go build ${LDFLAGS} -o ${BINARY_NAME}-linux-arm64 ./cmd/githerd
-	
+	GOOS=linux GOARCH=arm64 go build ${LDFLAGS} -o ${BINARY_NAME}-linux-arm64 ./cmd/git-herd
+
 	@echo "Building for Windows (x64)..."
-	GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-windows-amd64.exe ./cmd/githerd
-	
+	GOOS=windows GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY_NAME}-windows-amd64.exe ./cmd/git-herd
+
 	@echo "Cross-platform builds completed!"
 
 # Create release packages
@@ -116,18 +116,18 @@ build-all: clean
 package: build-all
 	@echo "Creating release packages..."
 	mkdir -p dist
-	
+
 	# macOS packages
 	tar -czf dist/${BINARY_NAME}-${VERSION}-darwin-amd64.tar.gz ${BINARY_NAME}-darwin-amd64 README.md
 	tar -czf dist/${BINARY_NAME}-${VERSION}-darwin-arm64.tar.gz ${BINARY_NAME}-darwin-arm64 README.md
-	
+
 	# Linux packages
 	tar -czf dist/${BINARY_NAME}-${VERSION}-linux-amd64.tar.gz ${BINARY_NAME}-linux-amd64 README.md
 	tar -czf dist/${BINARY_NAME}-${VERSION}-linux-arm64.tar.gz ${BINARY_NAME}-linux-arm64 README.md
-	
+
 	# Windows package
 	zip -j dist/${BINARY_NAME}-${VERSION}-windows-amd64.zip ${BINARY_NAME}-windows-amd64.exe README.md
-	
+
 	@echo "Release packages created in dist/"
 
 # Development workflow
@@ -148,7 +148,7 @@ run-path: build
 # Show help
 .PHONY: help
 help:
-	@echo "GitHerd Makefile"
+	@echo "git-herd Makefile"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  build        Build the binary"

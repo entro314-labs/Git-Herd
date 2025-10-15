@@ -5,8 +5,8 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 // DefaultConfig returns a configuration with sensible defaults
@@ -45,10 +45,10 @@ func SetupFlags(cmd *cobra.Command, config *types.Config) {
 // SetupViper configures viper for configuration file support
 func SetupViper(cmd *cobra.Command) {
 	// Setup viper for configuration file support
-	viper.SetConfigName("githerd")
+	viper.SetConfigName("git-herd")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
-	viper.AddConfigPath("$HOME/.config/githerd")
+	viper.AddConfigPath("$HOME/.config/git-herd")
 
 	// Bind flags to viper
 	_ = viper.BindPFlag("operation", cmd.Flags().Lookup("operation"))
@@ -70,11 +70,11 @@ func SetupViper(cmd *cobra.Command) {
 // LoadConfig loads and validates configuration
 func LoadConfig() (*types.Config, error) {
 	config := DefaultConfig()
-	
+
 	// Load from viper (which includes file and flags)
 	if err := viper.Unmarshal(config); err != nil {
 		return nil, err
 	}
-	
+
 	return config, nil
 }

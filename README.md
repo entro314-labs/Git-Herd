@@ -1,6 +1,6 @@
-# GitHerd 🐑
+# git-herd 🐑
 
-A decent, not bad, concurrent Git repository management tool written in Go. GitHerd allows you to perform bulk `fetch` or `pull` operations across multiple Git repositories in a directory tree.
+A decent, not bad, concurrent Git repository management tool written in Go. git-herd allows you to perform bulk `fetch` or `pull` operations across multiple Git repositories in a directory tree.
 
 Because I'm lazy and because any given time I have more than 300 git repos locally I needed a fast way to fetch/pull changes in bulk.
 
@@ -21,8 +21,8 @@ Because I'm lazy and because any given time I have more than 300 git repos local
 ### From Source
 
 ```bash
-git clone https://github.com/entro314-labs/Git-Herd
-cd Git-Herd
+git clone https://github.com/entro314-labs/git-herd
+cd git-herd
 make build
 sudo make install
 ```
@@ -30,7 +30,7 @@ sudo make install
 ### Using Go Install
 
 ```bash
-go install github.com/entro314-labs/Git-Herd/cmd/githerd@latest
+go install github.com/entro314-labs/git-herd/cmd/git-herd@latest
 ```
 
 ## Usage
@@ -39,31 +39,31 @@ go install github.com/entro314-labs/Git-Herd/cmd/githerd@latest
 
 ```bash
 # Fetch all repositories in current directory
-githerd
+git-herd
 
 # Pull all repositories in a specific directory
-githerd -o pull ~/Projects
+git-herd -o pull ~/Projects
 
 # Dry run to see what would happen
-githerd -n -o pull ~/Projects
+git-herd -n -o pull ~/Projects
 
 # Use more workers for faster processing
-githerd -w 10 ~/Projects
+git-herd -w 10 ~/Projects
 
 # Verbose output for debugging
-githerd -v ~/Projects
+git-herd -v ~/Projects
 ```
 
 ### Command Line Options
 
 ```
 Usage:
-  githerd [path] [flags]
+  git-herd [path] [flags]
 
 Flags:
   -e, --exclude strings     Directories to exclude (default [.git,node_modules,vendor])
   -n, --dry-run            Show what would be done without executing
-  -h, --help               help for githerd
+  -h, --help               help for git-herd
   -o, --operation string   Operation to perform: fetch or pull (default "fetch")
   -r, --recursive          Process repositories recursively (default true)
   -s, --skip-dirty         Skip repositories with uncommitted changes (default true)
@@ -74,7 +74,7 @@ Flags:
 
 ### Configuration File
 
-Create a `githerd.yaml` file in your working directory or `~/.config/githerd/`:
+Create a `git-herd.yaml` file in your working directory or `~/.config/git-herd/`:
 
 ```yaml
 operation: fetch
@@ -107,7 +107,7 @@ exclude:
 
 ## Output Format
 
-GitHerd provides clear, structured output:
+git-herd provides clear, structured output:
 
 ```
 📊 Processing Results:
@@ -122,7 +122,7 @@ GitHerd provides clear, structured output:
 
 ## TUI Mode
 
-By default, GitHerd runs with a beautiful Terminal User Interface (TUI) that shows:
+By default, git-herd runs with a beautiful Terminal User Interface (TUI) that shows:
 - Real-time progress with a progress bar
 - Live status updates for each repository
 - Colored output for success/failure states
@@ -130,7 +130,7 @@ By default, GitHerd runs with a beautiful Terminal User Interface (TUI) that sho
 
 To disable TUI and use plain text output:
 ```bash
-githerd --plain ~/Projects
+git-herd --plain ~/Projects
 ```
 
 ### Report Generation
@@ -138,10 +138,10 @@ githerd --plain ~/Projects
 Generate detailed reports of operations:
 ```bash
 # Save a detailed report to file
-githerd --save-report report.txt ~/Projects
+git-herd --save-report report.txt ~/Projects
 
 # Show full summary of all repositories
-githerd --full-summary ~/Projects
+git-herd --full-summary ~/Projects
 ```
 
 ## Advanced Usage
@@ -152,20 +152,20 @@ For better performance with many repositories:
 
 ```bash
 # Increase workers and timeout for large collections
-githerd -w 20 -t 15m ~/all-projects
+git-herd -w 20 -t 15m ~/all-projects
 
 # Process only direct subdirectories (not recursive)
-githerd -r=false ~/Projects
+git-herd -r=false ~/Projects
 ```
 
 ### Excluding Specific Directories
 
 ```bash
 # Exclude build artifacts and dependencies
-githerd -e node_modules,target,dist,vendor ~/Projects
+git-herd -e node_modules,target,dist,vendor ~/Projects
 
 # Use with specific operations
-githerd -o pull -e ".git,tmp,cache" ~/Projects
+git-herd -o pull -e ".git,tmp,cache" ~/Projects
 ```
 
 ### Integration with Shell
@@ -174,13 +174,13 @@ Add to your shell profile for quick access:
 
 ```bash
 # Fetch all repos in current directory
-alias gf='githerd'
+alias gf='git-herd'
 
 # Pull all repos in current directory
-alias gp='githerd -o pull'
+alias gp='git-herd -o pull'
 
 # Fetch all repos in Projects directory
-alias gfp='githerd ~/Projects'
+alias gfp='git-herd ~/Projects'
 ```
 
 ## Performance
@@ -192,7 +192,7 @@ alias gfp='githerd ~/Projects'
 
 ## Error Handling
 
-GitHerd provides detailed error reporting and handles common scenarios:
+git-herd provides detailed error reporting and handles common scenarios:
 
 - **Network timeouts**: Configurable timeout handling
 - **Authentication failures**: Clear error messages for auth issues
@@ -206,8 +206,8 @@ Requirements:
 - Go 1.25 or later
 
 ```bash
-git clone https://github.com/entro314-labs/Git-Herd
-cd Git-Herd
+git clone https://github.com/entro314-labs/git-herd
+cd git-herd
 make deps
 make build
 ```

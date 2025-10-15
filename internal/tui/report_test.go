@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/entro314-labs/Git-Herd/internal/config"
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/internal/config"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 func TestSaveReport(t *testing.T) {
@@ -71,7 +71,7 @@ func TestSaveReport(t *testing.T) {
 
 	// Check header information
 	expectedContent := []string{
-		"GitHerd Report",
+		"git-herd Report",
 		"Operation: fetch",
 		"Workers: 5",
 		"Total Repositories: 3",
@@ -562,4 +562,3 @@ func BenchmarkSaveReportLarge(b *testing.B) {
 		}
 	}
 }
-

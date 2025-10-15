@@ -7,26 +7,26 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/entro314-labs/Git-Herd/internal/git"
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/internal/git"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 type Model struct {
-	config     *types.Config
-	rootPath   string
-	ctx        context.Context
-	cancel     context.CancelFunc
-	scanner    *git.Scanner
-	processor  *git.Processor
-	
+	config    *types.Config
+	rootPath  string
+	ctx       context.Context
+	cancel    context.CancelFunc
+	scanner   *git.Scanner
+	processor *git.Processor
+
 	// UI state
-	phase      string
-	spinner    spinner.Model
-	progress   progress.Model
-	repos      []types.GitRepo
-	processed  int
-	results    []types.GitRepo
-	
+	phase     string
+	spinner   spinner.Model
+	progress  progress.Model
+	repos     []types.GitRepo
+	processed int
+	results   []types.GitRepo
+
 	// Status
 	scanning   bool
 	processing bool
@@ -92,19 +92,19 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.scanning = false
 		m.processing = true
 		m.phase = "processing"
-		
+
 		if len(m.repos) == 0 {
 			m.done = true
 			m.phase = "complete"
 			return m, tea.Quit
 		}
-		
+
 		return m, m.processRepos()
 
 	case repoProcessedMsg:
 		m.results = append(m.results, types.GitRepo(msg))
 		m.processed++
-		
+
 		if m.processed >= len(m.repos) {
 			m.processing = false
 			m.done = true
@@ -114,7 +114,7 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				tea.Quit,
 			)
 		}
-		
+
 		// Process next repo
 		return m, m.processNextRepo()
 
@@ -149,7 +149,7 @@ func (m *Model) processRepos() tea.Cmd {
 			processed := m.processor.ProcessRepo(m.ctx, m.repos[0])
 			return repoProcessedMsg(processed)
 		}
-		
+
 		return processingDoneMsg{err: nil}
 	}
 }

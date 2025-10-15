@@ -4,8 +4,8 @@
 *.dll
 *.so
 *.dylib
-/githerd
-githerd-*
+/git-herd
+git-herd-*
 
 # Test binary, built with `go test -c`
 *.test
@@ -40,4 +40,5 @@ dist/
 *.log
 .packaging/aur/PKGBUILD
 .packaging/RELEASE_PROCESS.md
-.packaging/winget/GitHerd.yaml
+.packaging/winget/git-herd.yaml
+.claude/settings.local.json

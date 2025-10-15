@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 // saveReport saves a detailed report to a file
@@ -17,7 +17,7 @@ func saveReport(config *types.Config, results []types.GitRepo, successful, faile
 	defer func() { _ = file.Close() }()
 
 	// Write header
-	_, _ = fmt.Fprintf(file, "GitHerd Report - %s\n", time.Now().Format("2006-01-02 15:04:05"))
+	_, _ = fmt.Fprintf(file, "git-herd Report - %s\n", time.Now().Format("2006-01-02 15:04:05"))
 	_, _ = fmt.Fprintf(file, "Operation: %s\n", config.Operation)
 	_, _ = fmt.Fprintf(file, "Workers: %d\n", config.Workers)
 	_, _ = fmt.Fprintf(file, "Total Repositories: %d\n", len(results))
@@ -29,16 +29,16 @@ func saveReport(config *types.Config, results []types.GitRepo, successful, faile
 	for _, result := range results {
 		_, _ = fmt.Fprintf(file, "Repository: %s\n", result.Name)
 		_, _ = fmt.Fprintf(file, "Path: %s\n", result.Path)
-		
+
 		if result.Branch != "" {
 			_, _ = fmt.Fprintf(file, "Branch: %s\n", result.Branch)
 		}
 		if result.Remote != "" {
 			_, _ = fmt.Fprintf(file, "Remote: %s\n", result.Remote)
 		}
-		
+
 		_, _ = fmt.Fprintf(file, "Duration: %v\n", result.Duration.Truncate(time.Millisecond))
-		
+
 		if result.Error != nil {
 			_, _ = fmt.Fprintf(file, "Status: FAILED - %v\n", result.Error)
 		} else if config.DryRun {
@@ -46,7 +46,7 @@ func saveReport(config *types.Config, results []types.GitRepo, successful, faile
 		} else {
 			_, _ = fmt.Fprintf(file, "Status: SUCCESS\n")
 		}
-		
+
 		_, _ = fmt.Fprintf(file, "\n")
 	}
 

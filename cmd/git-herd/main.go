@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/entro314-labs/Git-Herd/internal/config"
-	"github.com/entro314-labs/Git-Herd/internal/worker"
+	"github.com/entro314-labs/git-herd/internal/config"
+	"github.com/entro314-labs/git-herd/internal/worker"
 )
 
 // Version information - populated at build time by GoReleaser
@@ -33,9 +33,9 @@ func main() {
 	cfg := config.DefaultConfig()
 
 	rootCmd := &cobra.Command{
-		Use:     "githerd [path]",
-		Short:   "Bulk git operations on multiple repositories",
-		Long:    `GitHerd performs git operations (fetch/pull) on all git repositories 
+		Use:   "git-herd [path]",
+		Short: "Bulk git operations on multiple repositories",
+		Long: `git-herd performs git operations (fetch/pull) on all git repositories
 found in the specified directory and its subdirectories.`,
 		Version: buildVersion(),
 		Args:    cobra.MaximumNArgs(1),

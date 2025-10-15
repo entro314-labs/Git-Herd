@@ -1,24 +1,26 @@
-# golangci-lint configuration following modern Go conventions
+version: "2"
+
 run:
   timeout: 5m
   issues-exit-code: 1
   tests: true
   build-tags: []
-  skip-dirs: []
-  skip-files: []
   allow-parallel-runners: true
   go: "1.25.2"
 
 output:
   formats:
-    colored-line-number: stdout
+    - format: colored-line-number
   print-issued-lines: true
   print-linter-name: true
-  path-prefix: ""
-  sort-results: true
 
 issues:
-  uniq-by-line: true
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
+  fix: false
+  exclude-generated: use-default
+  exclude-case-sensitive: false
   exclude-rules:
     - path: _test\.go
       linters:
@@ -53,19 +55,94 @@ issues:
         - funlen
         - gocognit
         - dupl
-  exclude-use-default: false
-  exclude: []
-  max-issues-per-linter: 0
-  max-same-issues: 0
-  new: false
-  fix: false
-  exclude-dirs-use-default: true
-  exclude-dirs: []
-  exclude-files: []
-  severity:
-    default-severity: ""
-    case-sensitive: false
-    rules: []
+
+linters:
+  disable-all: true
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - containedctx
+    - contextcheck
+    - cyclop
+    - dupl
+    - dupword
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - copyloopvar
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gci
+    - ginkgolinter
+    - gocheckcompilerdirectives
+    - gochecknoglobals
+    - gochecknoinits
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - godot
+    - godox
+    - gofmt
+    - gofumpt
+    - goheader
+    - goimports
+    - mnd
+    - gomoddirectives
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - grouper
+    - importas
+    - ineffassign
+    - interfacebloat
+    - ireturn
+    - lll
+    - loggercheck
+    - maintidx
+    - makezero
+    - misspell
+    - nakedret
+    - nestif
+    - nilerr
+    - nilnil
+    - nlreturn
+    - noctx
+    - nolintlint
+    - nonamedreturns
+    - nosprintfhostport
+    - paralleltest
+    - prealloc
+    - predeclared
+    - promlinter
+    - reassign
+    - revive
+    - rowserrcheck
+    - sqlclosecheck
+    - staticcheck
+    - stylecheck
+    - tagliatelle
+    - usetesting
+    - testableexamples
+    - testpackage
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+    - wrapcheck
+    - wsl
 
 linters-settings:
   dupl:
@@ -91,7 +168,7 @@ linters-settings:
     sections:
       - standard
       - default
-      - prefix(github.com/entro314-labs/Git-Herd)
+      - prefix(github.com/entro314-labs/git-herd)
     skip-generated: true
     custom-order: true
 
@@ -107,7 +184,7 @@ linters-settings:
       - performance
       - style
     disabled-checks:
-      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - dupImport
       - ifElseChain
       - octalLiteral
       - whyNoLint
@@ -124,7 +201,7 @@ linters-settings:
     simplify: true
 
   goimports:
-    local-prefixes: github.com/entro314-labs/Git-Herd
+    local-prefixes: github.com/entro314-labs/git-herd
 
   mnd:
     checks:
@@ -221,7 +298,6 @@ linters-settings:
     q: false
 
   revive:
-    min-confidence: 0
     rules:
       - name: atomic
       - name: blank-imports
@@ -351,98 +427,8 @@ linters-settings:
     allow-multiline-assign: true
     force-case-trailing-whitespace: 0
 
-linters:
-  disable-all: true
-  enable:
-    - asasalint
-    - asciicheck
-    - bidichk
-    - bodyclose
-    - containedctx
-    - contextcheck
-    - cyclop
-    - dupl
-    - dupword
-    - durationcheck
-    - errcheck
-    - errchkjson
-    - errname
-    - errorlint
-    - exhaustive
-    - copyloopvar
-    - forbidigo
-    - forcetypeassert
-    - funlen
-    - gci
-    - ginkgolinter
-    - gocheckcompilerdirectives
-    - gochecknoglobals
-    - gochecknoinits
-    - gocognit
-    - goconst
-    - gocritic
-    - gocyclo
-    - godot
-    - godox
-    - gofmt
-    - gofumpt
-    - goheader
-    - goimports
-    - mnd
-    - gomoddirectives
-    - gomodguard
-    - goprintffuncname
-    - gosec
-    - gosimple
-    - govet
-    - grouper
-    - importas
-    - ineffassign
-    - interfacebloat
-    - ireturn
-    - lll
-    - loggercheck
-    - maintidx
-    - makezero
-    - misspell
-    - nakedret
-    - nestif
-    - nilerr
-    - nilnil
-    - nlreturn
-    - noctx
-    - nolintlint
-    - nonamedreturns
-    - nosprintfhostport
-    - paralleltest
-    - prealloc
-    - predeclared
-    - promlinter
-    - reassign
-    - revive
-    - rowserrcheck
-    - sqlclosecheck
-    - staticcheck
-    - stylecheck
-    - tagliatelle
-    - usetesting
-    - testableexamples
-    - testpackage
-    - thelper
-    - tparallel
-    - typecheck
-    - unconvert
-    - unparam
-    - unused
-    - usestdlibvars
-    - wastedassign
-    - whitespace
-    - wrapcheck
-    - wsl
-
 severity:
-  default-severity: error
-  case-sensitive: false
+  default: error
   rules:
     - linters:
         - revive

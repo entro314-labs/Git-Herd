@@ -11,9 +11,9 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/entro314-labs/Git-Herd/internal/git"
-	"github.com/entro314-labs/Git-Herd/internal/tui"
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/internal/git"
+	"github.com/entro314-labs/git-herd/internal/tui"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 // Manager handles bulk git operations with worker pools
@@ -47,10 +47,10 @@ func New(config *types.Config) *Manager {
 func (m *Manager) Execute(ctx context.Context, rootPath string) error {
 	// Use TUI if not in plain mode and not verbose (TUI doesn't work well with verbose logging)
 	if !m.config.PlainMode && !m.config.Verbose {
-		fmt.Printf("🎨 Starting GitHerd TUI...\n") // Debug
+		fmt.Printf("🎨 Starting git-herd TUI...\n") // Debug
 		model := tui.NewModel(m.config, rootPath)
 		p := tea.NewProgram(model)
-		
+
 		if _, err := p.Run(); err != nil {
 			fmt.Printf("TUI failed: %v\n", err) // Debug
 			// Fallback to plain mode if TUI fails
@@ -58,7 +58,7 @@ func (m *Manager) Execute(ctx context.Context, rootPath string) error {
 		}
 		return nil
 	}
-	
+
 	fmt.Printf("Using plain mode (plain: %v, verbose: %v)\n", m.config.PlainMode, m.config.Verbose) // Debug
 	return m.executeInPlainMode(ctx, rootPath)
 }
@@ -128,7 +128,7 @@ func (m *Manager) displayResults(ctx context.Context, resultChan <-chan types.Gi
 
 	for result := range resultChan {
 		allResults = append(allResults, result)
-		
+
 		if result.Error != nil {
 			if strings.Contains(result.Error.Error(), "skipped") {
 				skipped++
@@ -158,15 +158,15 @@ func (m *Manager) displayResults(ctx context.Context, resultChan <-chan types.Gi
 		if len(allResults) <= displayCount*2 {
 			displayCount = len(allResults) / 2
 		}
-		
+
 		for i, result := range allResults[:displayCount] {
 			m.displaySingleResult(result, i == 0)
 		}
-		
+
 		if len(allResults) > displayCount*2 {
 			fmt.Printf("... (%d more repositories) ...\n", len(allResults)-displayCount*2)
 		}
-		
+
 		if len(allResults) > displayCount {
 			start := len(allResults) - displayCount
 			if len(allResults) <= displayCount*2 {
@@ -228,7 +228,7 @@ func (m *Manager) saveReport(results []types.GitRepo, successful, failed, skippe
 	defer func() { _ = file.Close() }()
 
 	// Write header
-	if _, err := fmt.Fprintf(file, "GitHerd Report - %s\n", time.Now().Format("2006-01-02 15:04:05")); err != nil {
+	if _, err := fmt.Fprintf(file, "git-herd Report - %s\n", time.Now().Format("2006-01-02 15:04:05")); err != nil {
 		return fmt.Errorf("failed to write report header: %w", err)
 	}
 	if _, err := fmt.Fprintf(file, "Operation: %s\n", m.config.Operation); err != nil {
@@ -258,7 +258,7 @@ func (m *Manager) saveReport(results []types.GitRepo, successful, failed, skippe
 		if _, err := fmt.Fprintf(file, "Path: %s\n", result.Path); err != nil {
 			return fmt.Errorf("failed to write repository path: %w", err)
 		}
-		
+
 		if result.Branch != "" {
 			if _, err := fmt.Fprintf(file, "Branch: %s\n", result.Branch); err != nil {
 				return fmt.Errorf("failed to write branch: %w", err)
@@ -269,11 +269,11 @@ func (m *Manager) saveReport(results []types.GitRepo, successful, failed, skippe
 				return fmt.Errorf("failed to write remote: %w", err)
 			}
 		}
-		
+
 		if _, err := fmt.Fprintf(file, "Duration: %v\n", result.Duration.Truncate(time.Millisecond)); err != nil {
 			return fmt.Errorf("failed to write duration: %w", err)
 		}
-		
+
 		if result.Error != nil {
 			if _, err := fmt.Fprintf(file, "Status: FAILED - %v\n", result.Error); err != nil {
 				return fmt.Errorf("failed to write failed status: %w", err)
@@ -287,7 +287,7 @@ func (m *Manager) saveReport(results []types.GitRepo, successful, failed, skippe
 				return fmt.Errorf("failed to write success status: %w", err)
 			}
 		}
-		
+
 		if _, err := fmt.Fprintf(file, "\n"); err != nil {
 			return fmt.Errorf("failed to write separator: %w", err)
 		}

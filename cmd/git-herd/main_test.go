@@ -12,8 +12,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/entro314-labs/Git-Herd/internal/config"
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/internal/config"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 func TestBuildVersion(t *testing.T) {
@@ -91,16 +91,16 @@ func TestRootCommandCreation(t *testing.T) {
 	rootCmd := createRootCommand(cfg)
 
 	// Test command properties
-	if rootCmd.Use != "githerd [path]" {
-		t.Errorf("Expected Use to be 'githerd [path]', got %q", rootCmd.Use)
+	if rootCmd.Use != "git-herd [path]" {
+		t.Errorf("Expected Use to be 'git-herd [path]', got %q", rootCmd.Use)
 	}
 
 	if rootCmd.Short != "Bulk git operations on multiple repositories" {
 		t.Errorf("Expected Short description to be 'Bulk git operations on multiple repositories', got %q", rootCmd.Short)
 	}
 
-	if !strings.Contains(rootCmd.Long, "GitHerd performs git operations") {
-		t.Errorf("Expected Long description to contain 'GitHerd performs git operations', got %q", rootCmd.Long)
+	if !strings.Contains(rootCmd.Long, "git-herd performs git operations") {
+		t.Errorf("Expected Long description to contain 'git-herd performs git operations', got %q", rootCmd.Long)
 	}
 
 	// Test that the command accepts maximum of 1 argument
@@ -151,7 +151,7 @@ func TestRootCommandValidPath(t *testing.T) {
 	}
 
 	// Create a temporary directory for testing
-	tmpDir, err := os.MkdirTemp("", "githerd-test-*")
+	tmpDir, err := os.MkdirTemp("", "git-herd-test-*")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -162,8 +162,8 @@ func TestRootCommandValidPath(t *testing.T) {
 	}()
 
 	cfg := config.DefaultConfig()
-	cfg.DryRun = true // Use dry run to avoid actual git operations
-	cfg.PlainMode = true // Use plain mode to avoid TUI issues in tests
+	cfg.DryRun = true             // Use dry run to avoid actual git operations
+	cfg.PlainMode = true          // Use plain mode to avoid TUI issues in tests
 	cfg.Timeout = 1 * time.Second // Short timeout for tests
 
 	rootCmd := createRootCommand(cfg)
@@ -253,9 +253,9 @@ func TestRootCommandHelp(t *testing.T) {
 // This is a helper function that extracts the root command creation logic
 func createRootCommand(cfg *types.Config) *cobra.Command {
 	rootCmd := &cobra.Command{
-		Use:     "githerd [path]",
-		Short:   "Bulk git operations on multiple repositories",
-		Long: `GitHerd performs git operations (fetch/pull) on all git repositories
+		Use:   "git-herd [path]",
+		Short: "Bulk git operations on multiple repositories",
+		Long: `git-herd performs git operations (fetch/pull) on all git repositories
 found in the specified directory and its subdirectories.`,
 		Version: buildVersion(),
 		Args:    cobra.MaximumNArgs(1),
@@ -333,7 +333,7 @@ func TestContextHandling(t *testing.T) {
 	rootCmd := createRootCommand(cfg)
 
 	// Create a temporary directory for testing
-	tmpDir, err := os.MkdirTemp("", "githerd-test-*")
+	tmpDir, err := os.MkdirTemp("", "git-herd-test-*")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

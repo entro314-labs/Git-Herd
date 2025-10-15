@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-We provide security updates for the following versions of Git-Herd:
+We provide security updates for the following versions of git-herd:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -11,7 +11,7 @@ We provide security updates for the following versions of Git-Herd:
 
 ## Reporting a Vulnerability
 
-We take security vulnerabilities seriously. If you discover a security vulnerability in Git-Herd, please follow these steps:
+We take security vulnerabilities seriously. If you discover a security vulnerability in git-herd, please follow these steps:
 
 ### 1. Do NOT Create a Public Issue
 
@@ -21,7 +21,7 @@ Please do not create a public GitHub issue for security vulnerabilities. This he
 
 Send your security report via email to:
 - **Email**: [security@entro314-labs.com]
-- **Subject**: `[SECURITY] Git-Herd Vulnerability Report`
+- **Subject**: `[SECURITY] git-herd Vulnerability Report`
 
 ### 3. Include Detailed Information
 
@@ -30,7 +30,7 @@ Please include the following information in your report:
 - **Description**: A detailed description of the vulnerability
 - **Impact**: What could an attacker accomplish by exploiting this vulnerability?
 - **Reproduction**: Step-by-step instructions to reproduce the vulnerability
-- **Environment**: Operating system, Git-Herd version, Go version
+- **Environment**: Operating system, git-herd version, Go version
 - **Supporting Material**: Screenshots, logs, or proof-of-concept code (if applicable)
 
 ### 4. Response Timeline
@@ -55,17 +55,17 @@ We follow responsible disclosure practices:
 
 ### General Security Practices
 
-When using Git-Herd, consider the following security best practices:
+When using git-herd, consider the following security best practices:
 
 #### 1. File System Access
-- Git-Herd requires read access to directories and git repositories
-- Ensure you only run Git-Herd on directories you trust
+- git-herd requires read access to directories and git repositories
+- Ensure you only run git-herd on directories you trust
 - Be cautious when running with elevated privileges
 
 #### 2. Git Operations
-- Git-Herd performs `git fetch` and `git pull` operations
+- git-herd performs `git fetch` and `git pull` operations
 - These operations can trigger git hooks in repositories
-- Review git hooks in repositories before running Git-Herd
+- Review git hooks in repositories before running git-herd
 - Use the `--dry-run` flag to preview operations
 
 #### 3. Network Operations
@@ -74,19 +74,19 @@ When using Git-Herd, consider the following security best practices:
 - Consider using SSH keys for authentication instead of passwords
 
 #### 4. Configuration Files
-- Git-Herd reads configuration from files in your home directory
+- git-herd reads configuration from files in your home directory
 - Ensure configuration files have appropriate permissions (600 or 644)
 - Do not include sensitive information in configuration files
 
 ### Known Security Limitations
 
 #### 1. Git Hook Execution
-- Git-Herd does not prevent execution of git hooks
+- git-herd does not prevent execution of git hooks
 - Malicious hooks could potentially execute arbitrary code
 - **Mitigation**: Review repositories and their hooks before processing
 
 #### 2. Path Traversal
-- Git-Herd processes directory structures
+- git-herd processes directory structures
 - While we implement path validation, use caution with untrusted directories
 - **Mitigation**: Use absolute paths and avoid processing untrusted directories
 
@@ -142,7 +142,7 @@ We actively monitor our dependencies for security vulnerabilities:
 - Prompt response to vulnerability disclosures in dependencies
 
 ### Third-Party Components
-Git-Herd uses the following main dependencies:
+git-herd uses the following main dependencies:
 - Go standard library
 - Cobra CLI framework
 - Bubble Tea TUI framework
@@ -152,7 +152,7 @@ Git-Herd uses the following main dependencies:
 ## Compliance and Standards
 
 ### Security Standards
-Git-Herd follows these security practices:
+git-herd follows these security practices:
 
 - **OWASP Guidelines**: We follow OWASP secure coding practices
 - **Go Security**: We follow Go-specific security recommendations

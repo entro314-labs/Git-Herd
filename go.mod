@@ -1,4 +1,4 @@
-module github.com/entro314-labs/Git-Herd
+module github.com/entro314-labs/git-herd
 
 go 1.25.2
 

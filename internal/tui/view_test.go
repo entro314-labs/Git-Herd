@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/entro314-labs/Git-Herd/internal/config"
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/internal/config"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 func TestModelView(t *testing.T) {
@@ -18,9 +18,9 @@ func TestModelView(t *testing.T) {
 
 	// Test view in different phases
 	tests := []struct {
-		name         string
-		setupModel   func(*Model)
-		expectContains []string
+		name              string
+		setupModel        func(*Model)
+		expectContains    []string
 		expectNotContains []string
 	}{
 		{
@@ -29,7 +29,7 @@ func TestModelView(t *testing.T) {
 				m.phase = "initializing"
 			},
 			expectContains: []string{
-				"GitHerd",
+				"git-herd",
 				"Fetch Operation",
 				"Scanning for Git repositories",
 				"/test/path",
@@ -156,7 +156,7 @@ func TestModelRenderSummary(t *testing.T) {
 				m.results = []types.GitRepo{}
 			},
 			expectContains: []string{
-				"GitHerd",
+				"git-herd",
 				"No Git repositories found",
 				"/test/path",
 			},
@@ -186,7 +186,7 @@ func TestModelRenderSummary(t *testing.T) {
 				}
 			},
 			expectContains: []string{
-				"🎉 GitHerd Results",
+				"🎉 git-herd Results",
 				"✓",
 				"repo1",
 				"/test/repo1",
@@ -570,4 +570,3 @@ func BenchmarkModelRenderSummary(b *testing.B) {
 		_ = model.renderSummary()
 	}
 }
-

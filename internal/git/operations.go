@@ -7,7 +7,7 @@ import (
 
 	gogit "github.com/go-git/go-git/v5"
 
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 // Processor handles git operations on repositories

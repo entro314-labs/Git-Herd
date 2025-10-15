@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/entro314-labs/Git-Herd/pkg/types"
+	"github.com/entro314-labs/git-herd/pkg/types"
 )
 
 func TestDefaultConfig(t *testing.T) {
@@ -251,7 +251,7 @@ func TestSetupViperWithConfigFile(t *testing.T) {
 	}
 
 	// Create temporary directory for config file
-	tmpDir, err := os.MkdirTemp("", "githerd-config-test-*")
+	tmpDir, err := os.MkdirTemp("", "git-herd-config-test-*")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -262,7 +262,7 @@ func TestSetupViperWithConfigFile(t *testing.T) {
 	}()
 
 	// Create a test config file
-	configPath := filepath.Join(tmpDir, "githerd.yaml")
+	configPath := filepath.Join(tmpDir, "git-herd.yaml")
 	configContent := `
 workers: 8
 operation: pull
