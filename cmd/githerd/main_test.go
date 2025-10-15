@@ -17,8 +17,7 @@ import (
 )
 
 func TestBuildVersion(t *testing.T) {
-	t.Parallel()
-
+	// Note: Cannot use t.Parallel() on subtests because they modify global package variables
 	tests := []struct {
 		name     string
 		version  string
@@ -55,8 +54,6 @@ func TestBuildVersion(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
 			// Save original values
 			origVersion := version
 			origCommit := commit
@@ -363,9 +360,6 @@ func TestContextHandling(t *testing.T) {
 func TestArgumentHandling(t *testing.T) {
 	t.Parallel()
 
-	cfg := config.DefaultConfig()
-	cfg.DryRun = true
-
 	tests := []struct {
 		name     string
 		args     []string
@@ -399,6 +393,10 @@ func TestArgumentHandling(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
+			// Create a new config for each parallel test to avoid data races
+			cfg := config.DefaultConfig()
+			cfg.DryRun = true
 
 			rootCmd := createRootCommand(cfg)
 			var buf bytes.Buffer
