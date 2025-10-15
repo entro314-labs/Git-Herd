@@ -14,8 +14,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        go-version: ['1.25']
-    
+        go-version: ['1.25.2']
+
     runs-on: ${{ matrix.os }}
     
     steps:
@@ -56,7 +56,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v6
       with:
-        go-version: '1.25'
+        go-version: '1.25.2'
         cache: true
 
     - name: golangci-lint
@@ -77,11 +77,11 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v6
       with:
-        go-version: '1.25'
+        go-version: '1.25.2'
         cache: true
 
     - name: Run Gosec Security Scanner
-      uses: securecodewarrior/github-action-gosec@master
+      uses: securego/gosec@master
       with:
         args: '-fmt sarif -out gosec.sarif ./...'
 
@@ -123,7 +123,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v6
       with:
-        go-version: '1.25'
+        go-version: '1.25.2'
         cache: true
 
     - name: Build
@@ -144,7 +144,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v6
       with:
-        go-version: '1.25'
+        go-version: '1.25.2'
         cache: true
 
     - name: Check GoReleaser config

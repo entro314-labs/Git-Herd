@@ -7,11 +7,11 @@ run:
   skip-dirs: []
   skip-files: []
   allow-parallel-runners: true
-  go: "1.25.1"
+  go: "1.25.2"
 
 output:
   formats:
-    - format: colored-line-number
+    colored-line-number: stdout
   print-issued-lines: true
   print-linter-name: true
   path-prefix: ""

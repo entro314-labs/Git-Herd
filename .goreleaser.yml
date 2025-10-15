@@ -132,11 +132,11 @@ dockers:
       - "--label=org.opencontainers.image.source=https://github.com/entro314-labs/Git-Herd"
       - "--platform=linux/amd64"
 
-# SBOM generation for supply chain security
-sboms:
-  - artifacts: archive
-    documents:
-      - "{{ .ProjectName }}_{{ .Version }}_sbom.spdx.json"
+# SBOM generation for supply chain security (optional - requires syft installation)
+# sboms:
+#   - artifacts: archive
+#     documents:
+#       - "{{ .ProjectName }}_{{ .Version }}_sbom.spdx.json"
 
 # Homebrew tap automation
 homebrew_casks:
