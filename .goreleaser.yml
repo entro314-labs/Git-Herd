@@ -55,6 +55,7 @@ changelog:
   use: github
   sort: asc
   abbrev: 0
+  format: "* {{.SHA}}: {{.Message}} ({{.AuthorUsername}})"
   groups:
     - title: "🚀 Features"
       regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
