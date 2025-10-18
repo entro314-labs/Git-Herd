@@ -1,6 +1,6 @@
 module github.com/entro314-labs/git-herd
 
-go 1.25.2
+go 1.25.3
 
 require (
 	github.com/charmbracelet/bubbles v0.21.0
@@ -58,7 +58,7 @@ require (
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.43.0 // indirect
-	golang.org/x/exp v0.0.0-20251009144603-d2f985daa21b // indirect
+	golang.org/x/exp v0.0.0-20251017212417-90e834f514db // indirect
 	golang.org/x/net v0.46.0 // indirect
 	golang.org/x/sys v0.37.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
